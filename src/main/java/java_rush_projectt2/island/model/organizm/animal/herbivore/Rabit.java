@@ -1,9 +1,7 @@
-package java_rush_projectt2.island.model.animal.herbivore;
+package java_rush_projectt2.island.model.organizm.animal.herbivore;
 
 public class Rabit extends Herbivore {
-    public Rabit(double weight, int maxCount, int spead, double foodNeeded) {
-        super(weight, maxCount, spead, foodNeeded);
-    }
+
 
     public Rabit() {
      super(2,150,2,0.45);

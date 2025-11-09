@@ -1,0 +1,48 @@
+package java_rush_projectt2.island.factory;
+
+import java_rush_projectt2.island.model.organizm.Organism;
+import java_rush_projectt2.island.model.organizm.animal.herbivore.*;
+import java_rush_projectt2.island.model.organizm.animal.predator.*;
+import java_rush_projectt2.island.model.organizm.plant.Grass;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.Spliterator;
+import java.util.function.Supplier;
+
+public class OrganismFactory {
+
+    private static final Map<TypeOrganism, Supplier<Organism>> addition = new HashMap<>();
+
+    static {
+        addition.put(TypeOrganism.BEAR, Bear::new);
+        addition.put(TypeOrganism.BOA,Boa::new);
+        addition.put(TypeOrganism.FOX,Fox::new);
+        addition.put(TypeOrganism.EAGLE,Eagle::new);
+        addition.put(TypeOrganism.WOLF,Wolf::new);
+
+        addition.put(TypeOrganism.CATERPILLAR,Caterpillar::new);
+        addition.put(TypeOrganism.GOAT,Goat::new);
+        addition.put(TypeOrganism.DUCK,Duck::new);
+        addition.put(TypeOrganism.HORSE,Horse::new);
+        addition.put(TypeOrganism.BOAR,Boar::new);
+        addition.put(TypeOrganism.BUFFALO,Buffalo::new);
+        addition.put(TypeOrganism.DEER,Deer::new);
+        addition.put(TypeOrganism.MOUSE,Mouse::new);
+        addition.put(TypeOrganism.RABIT,Rabit::new);
+        addition.put(TypeOrganism.SHEEP,Sheep::new);
+
+        addition.put(TypeOrganism.GRASS,Grass::new);
+    }
+
+    public static Organism createOrganism(TypeOrganism type) {
+        Supplier<Organism> supplier = addition.get(type);
+
+        if (supplier == null) {
+            throw new RuntimeException("Uknown typy opganism " + type);
+        }
+
+        return supplier.get();
+    }
+}

@@ -1,9 +1,7 @@
-package java_rush_projectt2.island.model.animal.herbivore;
+package java_rush_projectt2.island.model.organizm.animal.herbivore;
 
 public class Buffalo extends Herbivore {
-    public Buffalo(double weight, int maxCount, int spead, double foodNeeded) {
-        super(weight, maxCount, spead, foodNeeded);
-    }
+
 
     public Buffalo() {
         super(700,10,3,100);
