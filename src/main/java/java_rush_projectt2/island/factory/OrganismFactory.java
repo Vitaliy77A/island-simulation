@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 
 public class OrganismFactory {
 
-    private static final Map<TypeOrganism, Supplier<Organism>> addition = new HashMap<>();
+    private static final Map<TypeOrganism, Supplier<? extends Organism>> addition = new HashMap<>();
 
     static {
         addition.put(TypeOrganism.BEAR, Bear::new);
@@ -36,13 +36,13 @@ public class OrganismFactory {
         addition.put(TypeOrganism.GRASS,Grass::new);
     }
 
-    public static Organism createOrganism(TypeOrganism type) {
-        Supplier<Organism> supplier = addition.get(type);
+    public static <T extends Organism> T createOrganism(TypeOrganism type) {
+        Supplier<? extends Organism> supplier = addition.get(type);
 
         if (supplier == null) {
-            throw new RuntimeException("Uknown typy opganism " + type);
+            throw new IllegalArgumentException("Uknown typy opganism " + type);
         }
 
-        return supplier.get();
+        return (T) supplier.get();
     }
 }

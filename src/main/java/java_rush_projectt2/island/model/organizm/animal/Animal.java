@@ -1,8 +1,10 @@
 package java_rush_projectt2.island.model.organizm.animal;
 
+import java_rush_projectt2.island.model.organizm.Eatable;
+import java_rush_projectt2.island.model.organizm.Moveble;
 import java_rush_projectt2.island.model.organizm.Organism;
 
-public abstract class Animal implements Organism {
+public abstract class Animal implements Organism, Moveble, Eatable {
 
     protected double weight;
 
@@ -19,9 +21,7 @@ public abstract class Animal implements Organism {
         this.foodNeeded = foodNeeded;
     }
 
-    public abstract void move();
 
-    public abstract void eat();
 
     public double getWeight() {
         return weight;

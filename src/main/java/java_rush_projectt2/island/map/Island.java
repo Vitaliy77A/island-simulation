@@ -19,9 +19,23 @@ public class Island {
     }
 
     public Location getLocation(int x, int y) {
-        if (y < 0 || y >= height || x < 0 || x >= widht) {
-throw new IllegalArgumentException("Out of bounds " + x + "," + y);
-        }
         return map[y][x];
+    }
+
+    public int getWidht() {
+        return map.length;
+    }
+
+    public int getHeight() {
+        return map[0].length;
+    }
+    public void step() {
+        System.out.println("Новая симуляция");
+        for (int y = 0; y < map.length; y++) {
+            for (int x = 0; x < map[y].length; x++) {
+                System.out.println("\nКлетка [" + y + "," + x + "]");
+                map[y][x].movementOrganism();
+            }
+        }
     }
 }
