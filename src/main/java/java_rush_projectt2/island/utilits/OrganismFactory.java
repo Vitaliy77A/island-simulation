@@ -1,19 +1,17 @@
-package java_rush_projectt2.island.factory;
+package java_rush_projectt2.island.utilits;
 
-import java_rush_projectt2.island.model.organizm.Organism;
+import java_rush_projectt2.island.model.organizm.GameSimulation;
 import java_rush_projectt2.island.model.organizm.animal.herbivore.*;
 import java_rush_projectt2.island.model.organizm.animal.predator.*;
 import java_rush_projectt2.island.model.organizm.plant.Grass;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.Spliterator;
 import java.util.function.Supplier;
 
 public class OrganismFactory {
 
-    private static final Map<TypeOrganism, Supplier<? extends Organism>> addition = new HashMap<>();
+    private static final Map<TypeOrganism, Supplier<? extends GameSimulation>> addition = new HashMap<>();
 
     static {
         addition.put(TypeOrganism.BEAR, Bear::new);
@@ -36,8 +34,8 @@ public class OrganismFactory {
         addition.put(TypeOrganism.GRASS,Grass::new);
     }
 
-    public static <T extends Organism> T createOrganism(TypeOrganism type) {
-        Supplier<? extends Organism> supplier = addition.get(type);
+    public static <T extends GameSimulation> T createOrganism(TypeOrganism type) {
+        Supplier<? extends GameSimulation> supplier = addition.get(type);
 
         if (supplier == null) {
             throw new IllegalArgumentException("Uknown typy opganism " + type);

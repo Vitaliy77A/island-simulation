@@ -7,18 +7,5 @@ public class Mouse extends Herbivore {
         super(0.05,500,1,0.01);
     }
 
-    @Override
-    public void move() {
 
-    }
-
-    @Override
-    public void eat() {
-
-    }
-
-    @Override
-    public void reproduce() {
-
-    }
 }

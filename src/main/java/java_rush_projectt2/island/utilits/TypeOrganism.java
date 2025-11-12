@@ -1,6 +1,4 @@
-package java_rush_projectt2.island.factory;
-
-import java.util.Locale;
+package java_rush_projectt2.island.utilits;
 
 public enum TypeOrganism {
 

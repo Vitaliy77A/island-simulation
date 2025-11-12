@@ -1,10 +1,8 @@
 package java_rush_projectt2.island.model.organizm.animal;
 
-import java_rush_projectt2.island.model.organizm.Eatable;
-import java_rush_projectt2.island.model.organizm.Moveble;
-import java_rush_projectt2.island.model.organizm.Organism;
+import java_rush_projectt2.island.model.organizm.GameSimulation;
 
-public abstract class Animal implements Organism, Moveble, Eatable {
+public abstract class Animal implements GameSimulation {
 
     protected double weight;
 
@@ -13,6 +11,28 @@ public abstract class Animal implements Organism, Moveble, Eatable {
     protected int maxSpeed;
 
     protected double foodNeeded;
+
+    @Override
+    public void play() {
+        move();
+        eat();
+        reproduce();
+    }
+
+    @Override
+    public void move() {
+        System.out.println(getClass().getSimpleName() + " рухається по карті");
+    }
+
+    @Override
+    public void eat() {
+        System.out.println(getClass().getSimpleName() + " в пошуках їжі");
+    }
+
+    @Override
+    public void reproduce() {
+        System.out.println(getClass().getSimpleName() + " розмножується");
+    }
 
     public Animal(double weight, int maxPopulation, int maxSpeed, double foodNeeded) {
         this.weight = weight;

@@ -7,18 +7,5 @@ public class Horse extends Herbivore {
         super(400, 20, 4,60);
     }
 
-    @Override
-    public void move() {
 
-    }
-
-    @Override
-    public void eat() {
-
-    }
-
-    @Override
-    public void reproduce() {
-
-    }
 }

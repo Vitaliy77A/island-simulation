@@ -1,6 +1,6 @@
 package java_rush_projectt2.island.map;
 
-import java_rush_projectt2.island.model.organizm.Organism;
+import java_rush_projectt2.island.model.organizm.GameSimulation;
 import java_rush_projectt2.island.model.organizm.animal.Animal;
 import java_rush_projectt2.island.model.organizm.plant.Plant;
 
@@ -8,21 +8,21 @@ import java.util.*;
 
 public class Location {
 
-    public final Map<String, Set<Organism>> residents = new HashMap<>();
+    public final Map<String, Set<GameSimulation>> residents = new HashMap<>();
 
     public Location() {
     }
 
-    public Map<String, Set<Organism>> getResidents() {
+    public Map<String, Set<GameSimulation>> getResidents() {
         return residents;
     }
 
-    public void addOrganism(Organism organism) {
-        String key = residents.getClass().getSimpleName().toUpperCase();
+    public void addOrganism(GameSimulation organism) {
+        String key = organism.getClass().getSimpleName().toUpperCase();
         residents.computeIfAbsent(key, it -> new HashSet<>()).add(organism);
     }
 
-    public void printResidents(Organism organism) {
+    public void printResidents() {
         if (residents.isEmpty()) {
             System.out.println("Локация пустая. ");
             return;
@@ -32,17 +32,17 @@ public class Location {
                 System.out.println(" - " + key + " : " + set.size()));
     }
 
-    public void remuvOrganism(Organism organism) {
+    public void remuvOrganism(GameSimulation gameSimulation) {
         String key = residents.getClass().getSimpleName().toUpperCase();
         if (!residents.containsKey(key)) {
             System.out.println("а локации не такого вида организма: " + key);
         }
         residents.computeIfPresent(key, (it, set) -> {
-          boolean remove = set.remove(organism);
+          boolean remove = set.remove(gameSimulation);
           if (remove) {
-              System.out.println("Удалено даный организм: " + organism.getClass().getSimpleName());
+              System.out.println("Удалено даный организм: " + gameSimulation.getClass().getSimpleName());
           } else {
-              System.out.println("Организм: " + organism.getClass().getSimpleName() + " не найден.");
+              System.out.println("Организм: " + gameSimulation.getClass().getSimpleName() + " не найден.");
           }
             return set.isEmpty() ? null : set;
         });
@@ -50,14 +50,12 @@ public class Location {
     }
 
     public void movementOrganism() {
-        for (Set<Organism> group : residents.values()) {
-            for (Organism organism : group) {
-                if (organism instanceof Animal animal) {
-                    animal.move();
-                    animal.eat();
-                    animal.reproduce();
-                } else if (organism instanceof Plant plant) {
-                    plant.reproduce();
+        for (Set<GameSimulation> group : residents.values()) {
+            for (GameSimulation gameSimulation : group) {
+                if (gameSimulation instanceof Animal animal) {
+                   animal.play();
+                } else if (gameSimulation instanceof Plant plant) {
+                    plant.play();
                 }
             }
         }

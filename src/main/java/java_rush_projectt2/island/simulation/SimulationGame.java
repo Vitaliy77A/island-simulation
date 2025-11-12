@@ -1,18 +1,15 @@
 package java_rush_projectt2.island.simulation;
 
-import java_rush_projectt2.island.factory.OrganismFactory;
-import java_rush_projectt2.island.factory.TypeOrganism;
+import java_rush_projectt2.island.utilits.OrganismFactory;
+import java_rush_projectt2.island.utilits.TypeOrganism;
 import java_rush_projectt2.island.map.Island;
 import java_rush_projectt2.island.map.Location;
-import java_rush_projectt2.island.model.organizm.Organism;
-import java_rush_projectt2.island.model.organizm.animal.Animal;
-import java_rush_projectt2.island.model.organizm.plant.Plant;
 
 public class SimulationGame {
 
     public static void main(String[] args) {
 
-        Island island = new Island(2,2);
+        Island island = new Island(4,4);
 
         Location location = island.getLocation(0,0);
 
@@ -22,9 +19,15 @@ public class SimulationGame {
 
         Location location2 = island.getLocation(1,1);
         location2.addOrganism(OrganismFactory.createOrganism(TypeOrganism.BEAR));
+        location2.addOrganism(OrganismFactory.createOrganism(TypeOrganism.DEER));
         location2.addOrganism(OrganismFactory.createOrganism(TypeOrganism.GRASS));
 
-        for (int i = 0; i <= 3 ; i++) {
+        Location location3 = island.getLocation(2,2);
+        location3.addOrganism(OrganismFactory.createOrganism(TypeOrganism.BOA));
+        location3.addOrganism(OrganismFactory.createOrganism(TypeOrganism.DUCK));
+        location3.addOrganism(OrganismFactory.createOrganism(TypeOrganism.GRASS));
+
+        for (int i = 0; i <= 4 ; i++) {
             System.out.println("Начало симуляции " + i);
             island.step();
         }

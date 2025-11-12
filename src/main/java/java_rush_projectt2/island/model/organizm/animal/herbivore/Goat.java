@@ -7,18 +7,5 @@ public class Goat extends Herbivore {
         super(60,140,3,10);
     }
 
-    @Override
-    public void move() {
 
-    }
-
-    @Override
-    public void eat() {
-
-    }
-
-    @Override
-    public void reproduce() {
-
-    }
 }

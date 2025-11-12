@@ -7,18 +7,5 @@ public class Duck extends Herbivore {
         super(1,200,4,0.15);
     }
 
-    @Override
-    public void move() {
 
-    }
-
-    @Override
-    public void eat() {
-
-    }
-
-    @Override
-    public void reproduce() {
-
-    }
 }

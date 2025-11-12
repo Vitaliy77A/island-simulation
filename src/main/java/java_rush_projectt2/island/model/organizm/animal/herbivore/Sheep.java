@@ -7,18 +7,5 @@ public class Sheep extends Herbivore {
         super(70,140,3,15);
     }
 
-    @Override
-    public void move() {
 
-    }
-
-    @Override
-    public void eat() {
-
-    }
-
-    @Override
-    public void reproduce() {
-
-    }
 }

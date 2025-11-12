@@ -34,7 +34,9 @@ public class Island {
         for (int y = 0; y < map.length; y++) {
             for (int x = 0; x < map[y].length; x++) {
                 System.out.println("\nКлетка [" + y + "," + x + "]");
-                map[y][x].movementOrganism();
+                Location location = map[y][x];
+                location.printResidents();
+                location.movementOrganism();
             }
         }
     }

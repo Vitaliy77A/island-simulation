@@ -7,18 +7,5 @@ public class Fox extends Predator {
         super(8,30,2,2);
     }
 
-    @Override
-    public void move() {
 
-    }
-
-    @Override
-    public void eat() {
-
-    }
-
-    @Override
-    public void reproduce() {
-
-    }
 }

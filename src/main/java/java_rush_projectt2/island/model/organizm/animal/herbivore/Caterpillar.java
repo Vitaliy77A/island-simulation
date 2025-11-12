@@ -6,18 +6,5 @@ public class Caterpillar extends Herbivore {
         super(0.01,100,0,0);
     }
 
-    @Override
-    public void move() {
 
-    }
-
-    @Override
-    public void eat() {
-
-    }
-
-    @Override
-    public void reproduce() {
-
-    }
 }

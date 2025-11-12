@@ -7,18 +7,5 @@ public class Bear extends Predator {
         super(500,2,5,80);
     }
 
-    @Override
-    public void move() {
 
-    }
-
-    @Override
-    public void eat() {
-
-    }
-
-    @Override
-    public void reproduce() {
-
-    }
 }
