@@ -20,14 +20,14 @@ public class EatingTabletServise {
             while ((line = reader.readLine()) != null) {
                 if (line.isBlank()) continue;
                 String[] values = line.split("\\|");
-                String predator = values[0].trim();
+                String animal = values[0].trim();
 
                 Map<String, Integer> preyMap = new HashMap<>();
                 for (int i = 1; i < values.length; i++) {
                     int probability = Integer.parseInt(values[i].trim());
                     preyMap.put(hadersOrganism[i], probability );
                 }
-                eatingPossibilities.put(predator,preyMap);
+                eatingPossibilities.put(animal,preyMap);
 
             }
         } catch (Exception e) {

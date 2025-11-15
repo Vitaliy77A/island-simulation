@@ -20,6 +20,14 @@ public class Location {
     public void addOrganism(GameSimulation organism) {
         String key = organism.getClass().getSimpleName().toUpperCase();
         residents.computeIfAbsent(key, it -> new HashSet<>()).add(organism);
+
+        if (organism instanceof Animal animal) {
+            animal.setLocation(this);
+        }
+
+        if (organism instanceof Plant plant) {
+            plant.setLocation(this);
+        }
     }
 
     public void printResidents() {
@@ -33,7 +41,7 @@ public class Location {
     }
 
     public void remuvOrganism(GameSimulation gameSimulation) {
-        String key = residents.getClass().getSimpleName().toUpperCase();
+        String key = gameSimulation.getClass().getSimpleName().toUpperCase();
         if (!residents.containsKey(key)) {
             System.out.println("а локации не такого вида организма: " + key);
         }
@@ -50,8 +58,8 @@ public class Location {
     }
 
     public void movementOrganism() {
-        for (Set<GameSimulation> group : residents.values()) {
-            for (GameSimulation gameSimulation : group) {
+        for (Set<GameSimulation> group : new HashSet<>(residents.values())) {
+            for (GameSimulation gameSimulation : new HashSet<>(group)) {
                 if (gameSimulation instanceof Animal animal) {
                    animal.play();
                 } else if (gameSimulation instanceof Plant plant) {

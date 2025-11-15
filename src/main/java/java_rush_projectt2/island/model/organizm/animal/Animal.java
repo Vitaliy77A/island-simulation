@@ -1,6 +1,14 @@
 package java_rush_projectt2.island.model.organizm.animal;
 
+import java_rush_projectt2.island.map.Location;
 import java_rush_projectt2.island.model.organizm.GameSimulation;
+import java_rush_projectt2.island.model.organizm.plant.Grass;
+import java_rush_projectt2.island.utilits.EatingTabletServise;
+
+
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Animal implements GameSimulation {
 
@@ -11,6 +19,8 @@ public abstract class Animal implements GameSimulation {
     protected int maxSpeed;
 
     protected double foodNeeded;
+
+    protected Location location;
 
     @Override
     public void play() {
@@ -26,7 +36,33 @@ public abstract class Animal implements GameSimulation {
 
     @Override
     public void eat() {
-        System.out.println(getClass().getSimpleName() + " в пошуках їжі");
+        String animal = getClass().getSimpleName();
+        Map<String, Set<GameSimulation>> residents = location.getResidents();
+        for (Map.Entry<String, Set<GameSimulation>> entry : residents.entrySet()) {
+            for (GameSimulation target : entry.getValue()) {
+                String prey = target.getClass().getSimpleName();
+                if (animal.equals(prey)) continue;
+                int chans = EatingTabletServise.getChans(animal, prey);
+                if (chans == 0) continue;
+                int random = ThreadLocalRandom.current().nextInt(100);
+                if (random < chans) {
+                    if (target instanceof Grass grass) {
+                        System.out.println(animal + " зїв частину " + prey +
+                                " шанс " + chans + "% вірогідність " + random);
+                        grass.decrease();
+                        return;
+                    }
+                    System.out.println(animal + " зїв " + prey + " шанс " + chans + " % вірогідність " + random);
+                    location.remuvOrganism(target);
+                    return;
+                } else {
+                    System.out.println(animal + " хотів зїв " + prey + " але шанс "
+                            + chans + " % вірогідністі не спрацював " + random);
+                }
+            }
+        }
+
+        System.out.println(animal + " не знайшов їжу");
     }
 
     @Override
@@ -41,7 +77,13 @@ public abstract class Animal implements GameSimulation {
         this.foodNeeded = foodNeeded;
     }
 
+    public Location getLocation() {
+        return location;
+    }
 
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 
     public double getWeight() {
         return weight;

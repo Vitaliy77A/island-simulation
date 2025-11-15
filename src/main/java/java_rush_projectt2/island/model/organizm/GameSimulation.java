@@ -14,6 +14,9 @@ public interface GameSimulation {
 
    }
    default void grov() {
+   }
+   default void decrease() {
 
    }
+
 }

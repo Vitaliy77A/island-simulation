@@ -13,14 +13,14 @@ public class SimulationGame {
 
         Location location = island.getLocation(0,0);
 
-        location.addOrganism(OrganismFactory.createOrganism(TypeOrganism.WOLF));
-        location.addOrganism(OrganismFactory.createOrganism(TypeOrganism.RABIT));
-        location.addOrganism(OrganismFactory.createOrganism(TypeOrganism.GRASS));
-
-        Location location2 = island.getLocation(1,1);
-        location2.addOrganism(OrganismFactory.createOrganism(TypeOrganism.BEAR));
-        location2.addOrganism(OrganismFactory.createOrganism(TypeOrganism.DEER));
-        location2.addOrganism(OrganismFactory.createOrganism(TypeOrganism.GRASS));
+//        location.addOrganism(OrganismFactory.createOrganism(TypeOrganism.WOLF));
+//        location.addOrganism(OrganismFactory.createOrganism(TypeOrganism.RABIT));
+//        location.addOrganism(OrganismFactory.createOrganism(TypeOrganism.GRASS));
+//
+//        Location location2 = island.getLocation(1,1);
+//        location2.addOrganism(OrganismFactory.createOrganism(TypeOrganism.BEAR));
+//        location2.addOrganism(OrganismFactory.createOrganism(TypeOrganism.DEER));
+//        location2.addOrganism(OrganismFactory.createOrganism(TypeOrganism.GRASS));
 
         Location location3 = island.getLocation(2,2);
         location3.addOrganism(OrganismFactory.createOrganism(TypeOrganism.BOA));
