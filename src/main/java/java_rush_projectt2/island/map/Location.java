@@ -1,71 +1,41 @@
 package java_rush_projectt2.island.map;
 
-import java_rush_projectt2.island.model.organizm.GameSimulation;
-import java_rush_projectt2.island.model.organizm.animal.Animal;
-import java_rush_projectt2.island.model.organizm.plant.Plant;
+import java_rush_projectt2.island.model_organizm.Organism;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Location {
 
-    public final Map<String, Set<GameSimulation>> residents = new HashMap<>();
+    private final ConcurrentHashMap<String, List<Organism>> residents = new ConcurrentHashMap<>();
 
-    public Location() {
-    }
-
-    public Map<String, Set<GameSimulation>> getResidents() {
+    public ConcurrentHashMap<String, List<Organism>> getResidents() {
         return residents;
     }
 
-    public void addOrganism(GameSimulation organism) {
+    public void addOrganism(Organism organism) {
         String key = organism.getClass().getSimpleName().toUpperCase();
-        residents.computeIfAbsent(key, it -> new HashSet<>()).add(organism);
-
-        if (organism instanceof Animal animal) {
-            animal.setLocation(this);
-        }
-
-        if (organism instanceof Plant plant) {
-            plant.setLocation(this);
-        }
+        residents.computeIfAbsent(key, k -> new ArrayList<>())
+                .add(organism);
     }
 
     public void printResidents() {
         if (residents.isEmpty()) {
-            System.out.println("Локация пустая. ");
+            System.out.println("Локация пустая.");
             return;
         }
-        System.out.println("Локация заселена: ");
-        residents.forEach((key, set) ->
-                System.out.println(" - " + key + " : " + set.size()));
+        System.out.println("Локация заселена:");
+        residents.forEach((key, list) ->
+                System.out.println(" - " + key + " : " + list.size()));
     }
 
-    public void remuvOrganism(GameSimulation gameSimulation) {
-        String key = gameSimulation.getClass().getSimpleName().toUpperCase();
-        if (!residents.containsKey(key)) {
-            System.out.println("а локации не такого вида организма: " + key);
-        }
-        residents.computeIfPresent(key, (it, set) -> {
-          boolean remove = set.remove(gameSimulation);
-          if (remove) {
-              System.out.println("Удалено даный организм: " + gameSimulation.getClass().getSimpleName());
-          } else {
-              System.out.println("Организм: " + gameSimulation.getClass().getSimpleName() + " не найден.");
-          }
-            return set.isEmpty() ? null : set;
+    public void removeOrganism(Organism organism) {
+        String key = organism.getClass().getSimpleName().toUpperCase();
+        residents.computeIfPresent(key, (k, list) -> {
+            list.remove(organism);
+            return list.isEmpty() ? null : list;
         });
-
-    }
-
-    public void movementOrganism() {
-        for (Set<GameSimulation> group : new HashSet<>(residents.values())) {
-            for (GameSimulation gameSimulation : new HashSet<>(group)) {
-                if (gameSimulation instanceof Animal animal) {
-                   animal.play();
-                } else if (gameSimulation instanceof Plant plant) {
-                    plant.play();
-                }
-            }
-        }
     }
 }
+
+
