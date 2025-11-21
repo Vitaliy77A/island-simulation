@@ -11,7 +11,7 @@ public class Island {
         this.height = height;
         this.map = new Location[widht][height];
 
-        for (int x = 0; x <widht; x++) {
+        for (int x = 0; x < widht; x++) {
             for (int y = 0; y < height; y++) {
                 map[x][y] = new Location();
 
@@ -23,6 +23,10 @@ public class Island {
         return map;
     }
     public Location getLocation(int x, int y) {
+        if (x < 0 || x >= widht || y < 0 || y >= height) {
+            throw new IllegalArgumentException("оординати " + x + " // " + y +
+                    " знаходяться за межами острова " + widht + "x" + height );
+        }
         return map[x][y];
     }
 

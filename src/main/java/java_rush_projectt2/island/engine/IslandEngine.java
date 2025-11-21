@@ -2,12 +2,13 @@ package java_rush_projectt2.island.engine;
 
 import java_rush_projectt2.island.map.Island;
 import java_rush_projectt2.island.map.Location;
+import java_rush_projectt2.island.model_organizm.Organism;
 import java_rush_projectt2.island.model_organizm.animal.Animal;
+import java_rush_projectt2.island.utilits.factory.OrganismFactory;
+import java_rush_projectt2.island.utilits.factory.OrganizmConfing;
+import java_rush_projectt2.island.utilits.factory.TypeOrganism;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class IslandEngine {
 
@@ -19,20 +20,53 @@ public class IslandEngine {
         this.island = island;
     }
 
+    public void  settlementRundom() {
+        ThreadLocalRandom localRandom = ThreadLocalRandom.current();
+
+        for (OrganizmConfing confing : OrganizmConfing.values()) {
+            int initialcount = confing.getMaxPopulation() / 10;
+            if (initialcount == 0) {
+                initialcount = 1;
+            }
+            TypeOrganism type = TypeOrganism.valueOf(confing.name());
+            for (int i = 0; i < initialcount; i++) {
+                Organism newOrganizm = OrganismFactory.createOrganism(type);
+
+                int randomX = localRandom.nextInt(island.getWidht());
+                int randomY = localRandom.nextInt(island.getHeight());
+
+                Location location = island.getLocation(randomX,randomY);
+                location.addOrganism(newOrganizm);
+            }
+        }
+
+        System.out.println("Острів успішно заселено");
+    }
+
     public void startSimulation() {
         service.scheduleAtFixedRate(this::runCycle,0,1, TimeUnit.SECONDS);
     }
 
     public void runCycle() {
         ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        for (Location location : island.getLocation()) {
-            executorService.submit(
-                    () -> {
-                        for (Animal animal : location.getResidents()) {
 
-                        }
-                    });
+Location [][] map = island.getMap();
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map[y].length; y++) {
+                Location location = map[x][y];
+                executorService.submit(() -> {
 
+                        });
+                 executorService.shutdown();
+                 try {
+                     executorService.awaitTermination(1,TimeUnit.SECONDS);
+                 } catch (InterruptedException e) {
+                     Thread.currentThread().interrupt();
+                 }
+
+            }
         }
+
+
     }
 }

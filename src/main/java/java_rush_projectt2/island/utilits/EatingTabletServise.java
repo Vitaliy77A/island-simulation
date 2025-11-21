@@ -37,7 +37,8 @@ public class EatingTabletServise {
     }
 
     public static int getChans(String predator, String pray) {
-        return eatingPossibilities.getOrDefault(predator,Map.of())
-                .getOrDefault(pray,0);
+        return 100;
+//        return eatingPossibilities.getOrDefault(predator,Map.of())
+//                .getOrDefault(pray,0);
     }
 }
