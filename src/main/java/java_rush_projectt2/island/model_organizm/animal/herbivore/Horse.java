@@ -6,6 +6,6 @@ public class Horse extends Herbivore {
 
 
     public Horse() {
-        super(OrganizmConfing.HOURSE);
+        super(OrganizmConfing.HORSE);
     }
 }

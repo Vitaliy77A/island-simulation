@@ -1,5 +1,6 @@
 package java_rush_projectt2.island.engine;
 
+import java_rush_projectt2.island.island_services.*;
 import java_rush_projectt2.island.map.Island;
 import java_rush_projectt2.island.map.Location;
 import java_rush_projectt2.island.model_organizm.Organism;
@@ -16,11 +17,20 @@ public class IslandEngine {
 
     private final ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
 
+    private final FoodServise foodServise = new FoodServise();
+    private final MovementService movementService = new MovementService();
+    private final ReproduceServise reproduceServise = new ReproduceServise();
+    private final StatisticServis statisticServis = new StatisticServis();
+    private final DeathService deathService = new DeathService();
+
+    private int currentTike = 0;
+
     public IslandEngine(Island island) {
         this.island = island;
+        this.settlementRundom();
     }
 
-    public void  settlementRundom() {
+    public void settlementRundom() {
         ThreadLocalRandom localRandom = ThreadLocalRandom.current();
 
         for (OrganizmConfing confing : OrganizmConfing.values()) {
@@ -35,7 +45,7 @@ public class IslandEngine {
                 int randomX = localRandom.nextInt(island.getWidht());
                 int randomY = localRandom.nextInt(island.getHeight());
 
-                Location location = island.getLocation(randomX,randomY);
+                Location location = island.getLocation(randomX, randomY);
                 location.addOrganism(newOrganizm);
             }
         }
@@ -44,29 +54,32 @@ public class IslandEngine {
     }
 
     public void startSimulation() {
-        service.scheduleAtFixedRate(this::runCycle,0,1, TimeUnit.SECONDS);
+        service.scheduleAtFixedRate(this::runCycle, 0, 1, TimeUnit.SECONDS);
     }
 
     public void runCycle() {
         ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-
-Location [][] map = island.getMap();
+        deathService.applyStarvationAndAging(island);
+        Location[][] map = island.getMap();
         for (int x = 0; x < map.length; x++) {
-            for (int y = 0; y < map[y].length; y++) {
+            for (int y = 0; y < map[x].length; y++) {
                 Location location = map[x][y];
                 executorService.submit(() -> {
-
-                        });
-                 executorService.shutdown();
-                 try {
-                     executorService.awaitTermination(1,TimeUnit.SECONDS);
-                 } catch (InterruptedException e) {
-                     Thread.currentThread().interrupt();
-                 }
+                    foodServise.timeToEat(location);
+                });
 
             }
         }
-
-
+        executorService.shutdown();
+        try {
+            executorService.awaitTermination(1, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        movementService.moveAll(island);
+        reproduceServise.timeToReproduce(island);
+        deathService.checkDeathConditions(island);
+        currentTike++;
+        statisticServis.printStatistic(island,currentTike);
     }
 }

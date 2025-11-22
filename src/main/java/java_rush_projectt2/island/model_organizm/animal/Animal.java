@@ -16,6 +16,7 @@ public abstract class Animal implements Movebel, Eating, Reproduce, Organism {
 
     protected final OrganizmConfing config;
     protected volatile double currentSatiety;
+    public int age = 0;
 
     public void setCurrentSatiety(double currentSatiety) {
         this.currentSatiety = currentSatiety;
@@ -23,6 +24,10 @@ public abstract class Animal implements Movebel, Eating, Reproduce, Organism {
 
     public double getCurrentSatiety() {
         return currentSatiety;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public Animal(OrganizmConfing config) {
@@ -63,7 +68,6 @@ public abstract class Animal implements Movebel, Eating, Reproduce, Organism {
                 int random = ThreadLocalRandom.current().nextInt(100);
 
                 if (random < chance) {
-                    System.out.println("DEBUG: Хижак " + predatorType + " успішно полює.");
                     double foodValue = 0;
 
                     if (target instanceof Grass grass) {
@@ -76,15 +80,10 @@ public abstract class Animal implements Movebel, Eating, Reproduce, Organism {
 
                         Animal preyAnimal = (Animal) target;
                         foodValue = preyAnimal.config.getMaxWeight();
-                        System.out.println("DEBUG: Здобич — " + preyAnimal.getClass().getSimpleName() +
-                                " | Вага: " + foodValue + " кг.");
-                       // foodValue = preyAnimal.config.getMaxWeight();
                         preyIterator.remove();
                     }
 
                     currentSatiety = Math.min(foodNeeded, currentSatiety + foodValue);
-                    System.out.println("DEBUG: Нове насичення: " + currentSatiety);
-
 
                     currentSatiety = Math.min(foodNeeded, currentSatiety + foodValue);
                 }

@@ -48,7 +48,6 @@ public class MovementService  {
 
         int positionX = Math.max(0, Math.min(island.getWidht() - 1, x + randomX));
         int positionY = Math.max(0, Math.min(island.getHeight() - 1, y + randomY));
-        System.out.println("DEBUG: New Coords (" + positionX + ", " + positionY + ")");
         return new int[]{positionX, positionY};
 
     }
