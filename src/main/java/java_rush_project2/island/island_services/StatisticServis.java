@@ -3,6 +3,7 @@ package java_rush_project2.island.island_services;
 import java_rush_project2.island.map.Island;
 import java_rush_project2.island.map.Location;
 import java_rush_project2.island.model_organizm.Organism;
+import java_rush_project2.island.utilits.factory.TypeOrganism;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,13 +30,39 @@ public class StatisticServis {
                 }
             }
         }
-        System.out.println("Такт: " + tick + " ");
-        System.out.println("Загальна кількість локацій: " + (island.getWidht() * island.getHeight()));
+        System.out.println("Tact: " + tick + " ");
+        System.out.println("Total number of locations: " + (island.getWidht() * island.getHeight()));
 
         statistic.forEach((type, statistics) -> {
             System.out.println(String.format(" %-15s: %d ", type, statistics));
         });
 
         System.out.println("_______________________________");
+    }
+
+    public int getTotalOrganismsCount(Island island) {
+        int countAnimals = 0;
+        Location[][] map = island.getMap();
+
+        for (int x = 0; x <map.length; x++) {
+            for (int y = 0; y <map[x].length; y++) {
+                Location location = map[x][y];
+                for (Map.Entry<String, List<Organism>> entry : location.getResidents().entrySet()) {
+                    String typeName = entry.getKey();
+
+                    TypeOrganism type = TypeOrganism.valueOf(typeName);
+                    if (type.getCategory() == TypeOrganism.Category.ANIMAL) {
+                       countAnimals += entry.getValue().size();
+                    }
+                }
+            }
+        }
+
+        return countAnimals;
+    }
+
+    public boolean isIslandEmpty(Island island) {
+
+        return getTotalOrganismsCount(island) <= 0;
     }
 }

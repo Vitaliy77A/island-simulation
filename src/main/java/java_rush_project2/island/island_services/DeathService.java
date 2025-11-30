@@ -13,8 +13,8 @@ public class DeathService {
     private List<Animal> getAnimalsInLocation(Location location) {
         return location.getResidents().values().stream()
                 .flatMap(List::stream)
-                .filter(organism -> organism instanceof Animal)
-                .map(organism -> (Animal) organism)
+                .filter(it -> it instanceof Animal)
+                .map(it -> (Animal) it)
                 .collect(Collectors.toList());
     }
 
@@ -31,11 +31,13 @@ public class DeathService {
 
                     double newSatiety = animal.getCurrentSatiety() - config.getHungerLossRate();
                     animal.setCurrentSatiety(newSatiety);
-                    animal.setAge(animal.age + 1);
+                    animal.setAge(animal.getAge() + 1);
                 }
             }
         }
     }
+
+
 
     public void checkDeathConditions(Island island) {
         Location[][] map = island.getMap();
@@ -48,7 +50,7 @@ public class DeathService {
                 for (Animal animal : actors) {
                     OrganizmConfing config = animal.getConfig();
 
-                    if (animal.getCurrentSatiety() <= 0 || animal.age >= config.getMaxLifespan()) {
+                    if (animal.getCurrentSatiety() <= 0 || animal.getAge() >= config.getMaxLifespan()) {
 
                         location.removeOrganism(animal);
                     }

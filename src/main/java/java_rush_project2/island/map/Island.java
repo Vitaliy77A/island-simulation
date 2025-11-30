@@ -24,8 +24,8 @@ public class Island {
     }
     public Location getLocation(int x, int y) {
         if (x < 0 || x >= widht || y < 0 || y >= height) {
-            throw new IllegalArgumentException("оординати " + x + " // " + y +
-                    " знаходяться за межами острова " + widht + "x" + height );
+            throw new IllegalArgumentException("Coordinates " + x + " // " + y +
+                    "are outside the island " + widht + "x" + height );
         }
         return map[x][y];
     }

@@ -18,7 +18,9 @@ public class EatingTabletServise {
             }
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.isBlank()) continue;
+                if (line.isBlank()) {
+                    continue;
+                }
                 String[] values = line.split("\\|");
                 String animal = values[0].trim();
 
@@ -31,7 +33,7 @@ public class EatingTabletServise {
 
             }
         } catch (Exception e) {
-            throw new RuntimeException("Помилка при читанні таблиці ймовірностей ", e);
+            throw new RuntimeException("Error reading probability table " + e);
         }
 
     }

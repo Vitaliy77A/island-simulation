@@ -16,7 +16,7 @@ public abstract class Animal implements Eating,Organism {
 
     protected final OrganizmConfing config;
     protected volatile double currentSatiety;
-    public int age = 0;
+    private volatile int age = 0;
 
     public void setCurrentSatiety(double currentSatiety) {
         this.currentSatiety = currentSatiety;
@@ -30,9 +30,13 @@ public abstract class Animal implements Eating,Organism {
         this.age = age;
     }
 
+    public int getAge() {
+        return age;
+    }
+
     public Animal(OrganizmConfing config) {
         this.config = config;
-        this.currentSatiety = config.getFoodNeeded();
+        this.currentSatiety = config.getMaxWeight();
     }
 
     public OrganizmConfing getConfig() {

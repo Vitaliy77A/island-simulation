@@ -15,9 +15,9 @@ public class Grass extends Plant {
     public void grov() {
         if (mass < MAX_MASS) {
             mass++;
-            System.out.println("Grass росте, масса: " + mass);
+            System.out.println("Grass grows mass: " + mass);
         } else {
-            System.out.println("Grass досягла максимального розміру: " + MAX_MASS);
+            System.out.println("Grass reached its maximum size: " + MAX_MASS);
         }
     }
 
@@ -42,7 +42,7 @@ public class Grass extends Plant {
         } else {
             eaten = mass;
             mass = 0.0;
-            System.out.println("Grass була повністю зїдена ");
+            System.out.println("Grass was completely eaten ");
         }
 
         return eaten;

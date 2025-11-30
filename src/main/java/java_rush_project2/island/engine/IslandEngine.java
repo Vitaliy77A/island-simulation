@@ -33,9 +33,9 @@ public class IslandEngine {
         ThreadLocalRandom localRandom = ThreadLocalRandom.current();
 
         for (OrganizmConfing confing : OrganizmConfing.values()) {
-            int initialcount = confing.getMaxPopulation() / 10;
-            if (initialcount == 0) {
-                initialcount = 1;
+            int initialcount = confing.getMaxPopulation();
+            if (initialcount < 10) {
+                initialcount = 10;
             }
             TypeOrganism type = TypeOrganism.valueOf(confing.name());
             for (int i = 0; i < initialcount; i++) {
@@ -49,7 +49,7 @@ public class IslandEngine {
             }
         }
 
-        System.out.println("Острів успішно заселено");
+        System.out.println("The island has been successfully settled: ");
     }
 
     public void startSimulation() {
@@ -75,10 +75,19 @@ public class IslandEngine {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+
         movementService.moveAll(island);
         reproduceServise.timeToReproduce(island);
         deathService.checkDeathConditions(island);
+
+        if (statisticServis.isIslandEmpty(island)) {
+            service.shutdown();
+            System.out.println("Simulation ended: All organisms are extinct.");
+            return;
+        }
+
         currentTike++;
-        statisticServis.printStatistic(island,currentTike);
+        statisticServis.printStatistic(island, currentTike);
+
     }
 }
