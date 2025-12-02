@@ -14,7 +14,7 @@ public enum TypeOrganism {
     GOAT(Category.ANIMAL),
     HORSE(Category.ANIMAL),
     MOUSE(Category.ANIMAL),
-    RABIT(Category.ANIMAL),
+    RABBIT(Category.ANIMAL),
     SHEEP(Category.ANIMAL),
     GRASS(Category.PLANT);
 

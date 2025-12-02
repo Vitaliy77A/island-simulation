@@ -1,6 +1,6 @@
 package java_rush_project2.island.map;
 
-import java_rush_project2.island.model_organizm.Organism;
+import java_rush_project2.island.model_organism.Organism;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,26 +20,13 @@ public class Location {
                 .add(organism);
     }
 
-    public void printResidents() {
-        if (residents.isEmpty()) {
-            System.out.println("The location is empty.");
-            return;
-        }
-        System.out.println("The location is inhabited: ");
-        residents.forEach((key, list) -> {
-            if (!list.isEmpty()) {
-                System.out.println(" - " + key + " : " + list.size());
-            }
-        });
-    }
-
     public void removeOrganism(Organism organism) {
         String key = organism.getClass().getSimpleName().toUpperCase();
         List<Organism> list = residents.get(key);
 
         if (list != null) {
 
-            list.removeIf(it -> it == organism);
+            list.remove(organism);
         }
     }
 }

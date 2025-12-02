@@ -1,17 +1,17 @@
 package java_rush_project2.island.map;
 
 public class Island {
-    private final int widht;
+    private final int width;
     private final int height;
     private final Location[][] map;
 
 
-    public Island(int widht, int height) {
-        this.widht = widht;
+    public Island(int width, int height) {
+        this.width = width;
         this.height = height;
-        this.map = new Location[widht][height];
+        this.map = new Location[width][height];
 
-        for (int x = 0; x < widht; x++) {
+        for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 map[x][y] = new Location();
 
@@ -23,20 +23,19 @@ public class Island {
         return map;
     }
     public Location getLocation(int x, int y) {
-        if (x < 0 || x >= widht || y < 0 || y >= height) {
+        if (x < 0 || x >= width || y < 0 || y >= height) {
             throw new IllegalArgumentException("Coordinates " + x + " // " + y +
-                    "are outside the island " + widht + "x" + height );
+                    " are outside the island " + width + "x" + height );
         }
         return map[x][y];
     }
 
-    public int getWidht() {
-        return map.length;
+    public int getWidth() {
+       return width;
     }
 
     public int getHeight() {
-        return map[0].length;
+        return height;
     }
-
 
 }

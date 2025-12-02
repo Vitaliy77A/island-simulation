@@ -3,91 +3,112 @@ package java_rush_project2.island.engine;
 import java_rush_project2.island.island_services.*;
 import java_rush_project2.island.map.Island;
 import java_rush_project2.island.map.Location;
-import java_rush_project2.island.model_organizm.Organism;
+import java_rush_project2.island.model_organism.Organism;
 import java_rush_project2.island.utilits.factory.OrganismFactory;
-import java_rush_project2.island.utilits.factory.OrganizmConfing;
+import java_rush_project2.island.utilits.factory.OrganismConfig;
 import java_rush_project2.island.utilits.factory.TypeOrganism;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.*;
 
 public class IslandEngine {
 
     private final Island island;
 
-    private final ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
+    private final ScheduledExecutorService gameTimer = Executors.newScheduledThreadPool(1);
 
-    private final FoodServise foodServise = new FoodServise();
+    private final ExecutorService workerPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+
+    private final FoodService foodService = new FoodService();
     private final MovementService movementService = new MovementService();
-    private final ReproduceServise reproduceServise = new ReproduceServise();
-    private final StatisticServis statisticServis = new StatisticServis();
+    private final ReproduceService reproduceService = new ReproduceService();
+    private final StatisticService statisticService = new StatisticService();
     private final DeathService deathService = new DeathService();
 
-    private int currentTike = 0;
+    private int currentTick = 0;
 
     public IslandEngine(Island island) {
         this.island = island;
-        this.settlementRundom();
+        this.populateIsland();
     }
 
-    public void settlementRundom() {
-        ThreadLocalRandom localRandom = ThreadLocalRandom.current();
+    public void populateIsland() {
+        for (int x = 0; x < island.getWidth(); x++) {
+            for (int y = 0; y < island.getHeight(); y++) {
+                Location currentLocation = island.getLocation(x, y);
 
-        for (OrganizmConfing confing : OrganizmConfing.values()) {
-            int initialcount = confing.getMaxPopulation();
-            if (initialcount < 10) {
-                initialcount = 10;
-            }
-            TypeOrganism type = TypeOrganism.valueOf(confing.name());
-            for (int i = 0; i < initialcount; i++) {
-                Organism newOrganizm = OrganismFactory.createOrganism(type);
+                for (OrganismConfig config : OrganismConfig.values()) {
 
-                int randomX = localRandom.nextInt(island.getWidht());
-                int randomY = localRandom.nextInt(island.getHeight());
 
-                Location location = island.getLocation(randomX, randomY);
-                location.addOrganism(newOrganizm);
+                    if (config == OrganismConfig.GRASS) {
+
+                        int count = ThreadLocalRandom.current().nextInt(config.getMaxPopulation());
+                        createOrganisms(config, currentLocation, count);
+                        continue;
+                    }
+
+
+                    if (ThreadLocalRandom.current().nextInt(100) < 15) {
+
+                        int maxInCell = config.getMaxPopulation();
+                        int countToSpawn = ThreadLocalRandom.current().nextInt(1, maxInCell + 1);
+
+                        createOrganisms(config, currentLocation, countToSpawn);
+                    }
+                }
             }
         }
+        System.out.println("The island has been populated.");
+    }
 
-        System.out.println("The island has been successfully settled: ");
+    private void createOrganisms(OrganismConfig config, Location location, int count) {
+        TypeOrganism type = TypeOrganism.valueOf(config.name());
+        for (int i = 0; i < count; i++) {
+            Organism organism = OrganismFactory.createOrganism(type);
+            location.addOrganism(organism);
+        }
     }
 
     public void startSimulation() {
-        service.scheduleAtFixedRate(this::runCycle, 0, 1, TimeUnit.SECONDS);
+
+        gameTimer.scheduleAtFixedRate(this::runCycle, 0, 1, TimeUnit.MILLISECONDS);
     }
 
     public void runCycle() {
-        ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         deathService.applyStarvationAndAging(island);
-        Location[][] map = island.getMap();
-        for (int x = 0; x < map.length; x++) {
-            for (int y = 0; y < map[x].length; y++) {
-                Location location = map[x][y];
-                executorService.submit(() -> {
-                    foodServise.timeToEat(location);
-                });
 
+        Location[][] map = island.getMap();
+        List<Callable<Void>> tasks = new ArrayList<>();
+
+        for (Location[] locations : map) {
+            for (Location location : locations) {
+                tasks.add(() -> {
+                    foodService.timeToEat(location);
+                    return null;
+                });
             }
         }
-        executorService.shutdown();
+
         try {
-            executorService.awaitTermination(1, TimeUnit.SECONDS);
+            workerPool.invokeAll(tasks);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
 
         movementService.moveAll(island);
-        reproduceServise.timeToReproduce(island);
+        reproduceService.timeToReproduce(island);
         deathService.checkDeathConditions(island);
 
-        if (statisticServis.isIslandEmpty(island)) {
-            service.shutdown();
+        if (statisticService.isIslandEmpty(island)) {
+            gameTimer.shutdown();
+            workerPool.shutdown();
             System.out.println("Simulation ended: All organisms are extinct.");
             return;
         }
 
-        currentTike++;
-        statisticServis.printStatistic(island, currentTike);
-
+        currentTick++;
+        statisticService.printStatistic(island, currentTick);
     }
 }

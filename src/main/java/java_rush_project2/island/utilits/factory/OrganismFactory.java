@@ -1,9 +1,9 @@
 package java_rush_project2.island.utilits.factory;
 
-import java_rush_project2.island.model_organizm.Organism;
-import java_rush_project2.island.model_organizm.animal.herbivore.*;
-import java_rush_project2.island.model_organizm.animal.predator.*;
-import java_rush_project2.island.model_organizm.plant.Grass;
+import java_rush_project2.island.model_organism.Organism;
+import java_rush_project2.island.model_organism.animal.herbivore.*;
+import java_rush_project2.island.model_organism.animal.predator.*;
+import java_rush_project2.island.model_organism.plant.Grass;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,17 +28,18 @@ public class OrganismFactory {
         addition.put(TypeOrganism.BUFFALO,Buffalo::new);
         addition.put(TypeOrganism.DEER, Deer::new);
         addition.put(TypeOrganism.MOUSE,Mouse::new);
-        addition.put(TypeOrganism.RABIT, Rabit::new);
+        addition.put(TypeOrganism.RABBIT, Rabbit::new);
         addition.put(TypeOrganism.SHEEP,Sheep::new);
 
         addition.put(TypeOrganism.GRASS,Grass::new);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T extends Organism> T createOrganism(TypeOrganism type) {
         Supplier<? extends Organism> supplier = addition.get(type);
 
         if (supplier == null) {
-            throw new IllegalArgumentException("Uknown typy opganism " + type);
+            throw new IllegalArgumentException("Unknown type organism " + type);
         }
 
         return (T) supplier.get();

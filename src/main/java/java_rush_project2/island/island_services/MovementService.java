@@ -2,26 +2,35 @@ package java_rush_project2.island.island_services;
 
 import java_rush_project2.island.map.Island;
 import java_rush_project2.island.map.Location;
-import java_rush_project2.island.model_organizm.Organism;
-import java_rush_project2.island.model_organizm.animal.Animal;
+import java_rush_project2.island.model_organism.Organism;
+import java_rush_project2.island.model_organism.animal.Animal;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class MovementService  {
+public class MovementService {
+
     public void moveAll(Island island) {
         Location[][] map = island.getMap();
+        Set<Organism> movedOrganisms = new HashSet<>();
+
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map[x].length; y++) {
                 Location currentLocation = map[x][y];
-                List<Organism> allOrganisms = currentLocation.getResidents().values().stream()
+
+                List<Animal> animalsToMove = currentLocation.getResidents().values().stream()
                         .flatMap(List::stream)
+                        .filter(it -> it instanceof Animal)
+                        .map(Animal.class::cast)
                         .toList();
-                List<Animal> animalToMove = allOrganisms.stream()
-                        .filter(it -> it instanceof Animal )
-                        .map(it -> (Animal) it)
-                        .toList();
-                for (Animal animal : animalToMove) {
+
+                for (Animal animal : animalsToMove) {
+                    if (movedOrganisms.contains(animal)) {
+                        continue;
+                    }
+
                     int[] newPosition = calculateNewPosition(x, y, island, animal);
                     int positionX = newPosition[0];
                     int positionY = newPosition[1];
@@ -31,25 +40,31 @@ public class MovementService  {
                     }
 
                     Location newLocation = map[positionX][positionY];
-                    currentLocation.removeOrganism(animal);
-                    newLocation.addOrganism(animal);
+
+                    if (currentLocation.getResidents().containsKey(animal.getClass().getSimpleName().toUpperCase())) {
+                        currentLocation.removeOrganism(animal);
+                        newLocation.addOrganism(animal);
+
+                        movedOrganisms.add(animal);
+                    }
                 }
             }
         }
     }
+
     private int[] calculateNewPosition(int x, int y, Island island, Animal animal) {
-        int spead = animal.getConfig().getMaxSpeed();
-        if (spead <= 0) {
+        int speed = animal.getConfig().getMaxSpeed();
+        if (speed <= 0) {
             return new int[]{x, y};
         }
 
-        int randomX = (int) (ThreadLocalRandom.current().nextInt(spead * 2 + 1)) - spead;
-        int randomY = (int) (ThreadLocalRandom.current().nextInt(spead * 2 + 1)) - spead;
+        int randomX = ThreadLocalRandom.current().nextInt(speed * 2 + 1) - speed;
+        int randomY = ThreadLocalRandom.current().nextInt(speed * 2 + 1) - speed;
 
-        int positionX = Math.max(0, Math.min(island.getWidht() - 1, x + randomX));
+        int positionX = Math.max(0, Math.min(island.getWidth() - 1, x + randomX));
         int positionY = Math.max(0, Math.min(island.getHeight() - 1, y + randomY));
-        return new int[]{positionX, positionY};
 
+        return new int[]{positionX, positionY};
     }
 }
 
